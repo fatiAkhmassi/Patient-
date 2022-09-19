@@ -22,7 +22,7 @@ public class PatientController {
     private PatientRepository patientRepository;
 
     //Afficher la Liste des patients
-    @GetMapping(path = "/index")
+    @GetMapping(path = "/user/index")
     public String patients(Model model,
                             @RequestParam(name="page",defaultValue = "0") int page,
                             @RequestParam(name="size",defaultValue = "5") int size,
@@ -38,32 +38,33 @@ public class PatientController {
 
     @GetMapping(path = "/")
     public String home() {
-        return "redirect:/index";
+        //return "redirect:/index";
+        return "home";
     }
 
     //Supprimer un patient dans la liste
-    @GetMapping(path = "/delete")
+    @GetMapping(path = "/admin/delete")
     public String delete(Long id,int page,int size,String keyword) {
         patientRepository.deleteById(id);
-        return "redirect:/index?page="+page+"&size="+size+"&keyword="+keyword;
+        return "redirect:/user/index?page="+page+"&size="+size+"&keyword="+keyword;
     }
 
     //Ajouter un patient a la liste
-    @GetMapping("/formPatients")
+    @GetMapping("/admin/formPatients")
     public String formPatients(Model model) {
         model.addAttribute("patient",new Patient());
         return "formPatients";
     }
 
-    @PostMapping(path = "/save")
+    @PostMapping(path = "/admin/save")
     public String save(Model model, @Valid Patient patient, BindingResult bindingResult){
         if (bindingResult.hasErrors()) return "formPatients";
         patientRepository.save(patient);
-        return "redirect:/index";
+        return "redirect:/user/index";
     }
 
     //Modifier un patient dans la liste
-    @GetMapping("/editPatients")
+    @GetMapping("/admin/editPatients")
     public String editPatients(Model model,Long id,int page,int size,String keyword) {
         Patient patient = patientRepository.findById(id).orElse(null);
         if (patient==null)throw  new RuntimeException("Patient introuvable");
@@ -74,11 +75,11 @@ public class PatientController {
         return "editPatients";
     }
 
-    @PostMapping(path = "/edit")
+    @PostMapping(path = "/admin/edit")
     public String edit(Model model, @Valid Patient patient, BindingResult bindingResult,int page,int size,String keyword){
         if (bindingResult.hasErrors()) return "editPatients";
         patientRepository.save(patient);
-        return "redirect:/index?page="+page+"&size="+size+"&keyword="+keyword;
+        return "redirect:/user/index?page="+page+"&size="+size+"&keyword="+keyword;
     }
 
 
@@ -87,7 +88,7 @@ public class PatientController {
 
 
     //pour envoyer les donnee ou format json
-    @GetMapping("/patients")
+    @GetMapping("/user/patients")
     @ResponseBody
     public List<Patient> patientList(){
         return patientRepository.findAll();

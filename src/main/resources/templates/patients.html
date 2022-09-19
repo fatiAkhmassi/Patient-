@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="template1">
+      layout:decorate="template1"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -13,7 +14,7 @@
             <div class="card">
                 <div class="card-header">Liste des patients</div>
                 <div class="card-body">
-                    <form action="get" th:action="@{index}">
+                    <form method="get" th:action="@{index}">
                         <label>Key word</label>
                         <input type="text" name="keyword" th:value="${keyword}"></input>
                         <button type="submit" class="btn btn-primary">Chercher</button>
@@ -35,11 +36,11 @@
                             <td th:text="${p.dateNaissance}"></td>
                             <td th:text="${p.malade}"></td>
                             <td th:text="${p.score}"></td>
-                            <td>
-                                <a onclick="return confirm('Etes vous sure?')" class="btn btn-danger" th:href="@{delete(id=${p.id},page=${currentPage},size=${currentSize},keyword=${keyword})}">Delete</a>
+                            <td sec:authorize="hasRole('ADMIN')">
+                                <a onclick="return confirm('Etes vous sure?')" class="btn btn-danger" th:href="@{/admin/delete(id=${p.id},page=${currentPage},size=${currentSize},keyword=${keyword})}">Delete</a>
                             </td>
-                            <td>
-                               <a class="btn btn-success" th:href="@{editPatients(id=${p.id},page=${currentPage},size=${currentSize},keyword=${keyword})}">Edit</a>
+                            <td sec:authorize="hasRole('ADMIN')">
+                               <a class="btn btn-success" th:href="@{/admin/editPatients(id=${p.id},page=${currentPage},size=${currentSize},keyword=${keyword})}">Edit</a>
                             </td>
                         </tr>
                         </tbody>
@@ -48,7 +49,7 @@
                         <li th:each="page,status:${pages}">
                             <a th:class="${status.index==currentPage?'btn btn-primary ms-1':'btn btn-outline-primary ms-1'}"
                                th:text="${status.index}"
-                               th:href="@{index(page=${status.index},size=${currentSize},keyword=${keyword})}"
+                               th:href="@{/user/index(page=${status.index},size=${currentSize},keyword=${keyword})}"
                             ></a>
                         </li>
                     </ul>

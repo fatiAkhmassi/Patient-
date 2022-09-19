@@ -13,7 +13,7 @@
             <div class="card">
                 <div class="card-header">Ajouter un nouveau patient</div>
                 <div class="card-body">
-                    <form method="post" th:action="@{edit(page=${page},size=${size},keyword=${keyword})}">
+                    <form method="post" th:action="@{/admin/edit(page=${page},size=${size},keyword=${keyword})}">
                         <div>
                             <div class="mt-2">
                                 <input type="text" name="id" placeholder="Entrer le id" class="form-control" th:value="${patient.id}">

@@ -13,7 +13,7 @@
             <div class="card">
                 <div class="card-header">Ajouter un nouveau patient</div>
                 <div class="card-body">
-                    <form method="post" th:action="@{save}">
+                    <form method="post" th:action="@{/admin/save}">
                         <div>
                             <div class="mt-2">
                                 <input type="text" name="nom" placeholder="Entrer le nom" class="form-control" th:value="${patient.nom}">
